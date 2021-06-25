@@ -69,3 +69,22 @@ Here we have example queries, so that you don't have to type them in yourself ea
 }
 
 ```
+
+
+# Development
+
+Make sure the .forever contract ABIs are in `../build/contracts`
+
+### Generate deployment code
+
+```bash
+yarn
+yarn codegen
+```
+
+### Deploy
+
+```bash
+yarn create-local
+yarn deploy-local
+```
