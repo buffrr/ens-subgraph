@@ -23,7 +23,7 @@ dataSources:
         - Resolver
       abis:
         - name: EnsRegistry
-          file: ./abis/Registry.json
+          file: ../build/contracts/EnsRegistry.json
       eventHandlers:
         - event: 'Transfer(indexed bytes32,address)'
           handler: handleTransfer
@@ -33,33 +33,6 @@ dataSources:
           handler: handleNewResolver
         - event: 'NewTTL(indexed bytes32,uint64)'
           handler: handleNewTTL
-  - kind: ethereum/contract
-    name: ENSRegistryOld
-    network: mainnet
-    source:
-      address: '0x314159265dd8dbb310642f98f50c066173c1259b'
-      abi: EnsRegistry
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      file: ./src/ensRegistry.ts
-      entities:
-        - Domain
-        - Account
-        - Resolver
-      abis:
-        - name: EnsRegistry
-          file: ./abis/Registry.json
-      eventHandlers:
-        - event: 'Transfer(indexed bytes32,address)'
-          handler: handleTransferOldRegistry
-        - event: 'NewOwner(indexed bytes32,indexed bytes32,address)'
-          handler: handleNewOwnerOldRegistry
-        - event: 'NewResolver(indexed bytes32,address)'
-          handler: handleNewResolverOldRegistry
-        - event: 'NewTTL(indexed bytes32,uint64)'
-          handler: handleNewTTLOldRegistry
   - kind: ethereum/contract
     name: Resolver
     network: mainnet
@@ -82,7 +55,7 @@ dataSources:
         - AuthorisationChanged
       abis:
         - name: Resolver
-          file: ./abis/PublicResolver.json
+          file: ../build/contracts/PublicResolver.json
       eventHandlers:
         - event: 'ABIChanged(indexed bytes32,indexed uint256)'
           handler: handleABIChanged
@@ -116,16 +89,13 @@ dataSources:
       entities:
         - Registration
         - NameRegistered
-        - NameRenewed
         - NameTransferred
       abis:
         - name: BaseRegistrar
-          file: ./abis/BaseRegistrar.json
+          file: ../build/contracts/BaseRegistrar.json
       eventHandlers:
-        - event: 'NameRegistered(indexed uint256,indexed address,uint256)'
+        - event: 'NameRegistered(indexed uint256,indexed address)'
           handler: handleNameRegistered
-        - event: 'NameRenewed(indexed uint256,uint256)'
-          handler: handleNameRenewed
         - event: 'Transfer(indexed address,indexed address,indexed uint256)'
           handler: handleNameTransferred
   - kind: ethereum/contract
@@ -143,9 +113,7 @@ dataSources:
         - Registration
       abis:
         - name: EthRegistrarController
-          file: ./abis/EthRegistrarController.json
+          file: ../build/contracts/EthRegistrarController.json
       eventHandlers:
-        - event: 'NameRegistered(string,indexed bytes32,indexed address,uint256,uint256)'
+        - event: 'NameRegistered(string,indexed bytes32,indexed address,uint256)'
           handler: handleNameRegisteredByController
-        - event: 'NameRenewed(string,indexed bytes32,uint256,uint256)'
-          handler: handleNameRenewedByController

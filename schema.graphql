@@ -9,7 +9,6 @@ type Domain @entity {
   owner: Account!
   resolver: Resolver
   ttl: BigInt
-  isMigrated: Boolean!
   createdAt: BigInt!
   events: [DomainEvent!]! @derivedFrom(field: "domain")
 }
@@ -64,7 +63,6 @@ type Registration @entity {
   id: ID!
   domain: Domain
   registrationDate: BigInt!
-  expiryDate: BigInt!
   cost: BigInt
   registrant: Account!
   labelName: String
@@ -84,15 +82,6 @@ type NameRegistered implements RegistrationEvent @entity {
   blockNumber: Int!
   transactionID: Bytes!
   registrant: Account!
-  expiryDate: BigInt!
-}
-
-type NameRenewed implements RegistrationEvent @entity {
-  id: ID!
-  registration: Registration!
-  blockNumber: Int!
-  transactionID: Bytes!
-  expiryDate: BigInt!
 }
 
 type NameTransferred implements RegistrationEvent @entity {
