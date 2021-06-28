@@ -75,6 +75,12 @@ dataSources:
           handler: handlePubkeyChanged
         - event: 'TextChanged(indexed bytes32,indexed string,string)'
           handler: handleTextChanged
+        - event: 'DNSRecordChanged(indexed bytes32,bytes,uint16,bytes)'
+          handler: handleDnsRecordChanged
+        - event: 'DNSRecordDeleted(indexed bytes32,bytes,uint16)'
+          handler: handleDnsRecordDeleted
+        - event: 'DNSZoneCleared(indexed bytes32)'
+          handler: handleDnsZoneCleared
   - kind: ethereum/contract
     name: BaseRegistrar
     network: mainnet
