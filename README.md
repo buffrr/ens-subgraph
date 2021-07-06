@@ -73,18 +73,35 @@ Here we have example queries, so that you don't have to type them in yourself ea
 
 # Development
 
-Make sure the .forever contract ABIs are in `../build/contracts`
+After deploying the contracts, clone this repo inside the forever-contracts directory (the ens-subgraph references .forever contract ABIs from `../build/contracts` and addresses.json from `../addresses.json`)
+
+Edit `addresses.json` and add the start block to index from for example: `startBlock: 12774296,` next to the network.
+
 
 ### Generate deployment code
 
 ```bash
 yarn
+yarn prepare
+```
+
+you should see `subgraph.yaml` generated with correct addresses. Run codegen
+
+```bash
 yarn codegen
 ```
 
 ### Deploy
 
+locally 
+
 ```bash
 yarn create-local
 yarn deploy-local
+```
+
+deploy to the graph:
+```
+yarn build
+yarn deploy
 ```
