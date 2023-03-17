@@ -1,10 +1,10 @@
 {
   "name": "forever-subgraph",
   "version": "1.0.2",
-  "repository": "https://github.com/impervious/forever-subgraph",
+  "repository": "https://github.com/imperviousinc/forever-subgraph",
   "license": "MIT",
   "scripts": {
-    "prepare": "mustache ../addresses.json subgraph.template.yaml > subgraph.yaml",
+    "prepare": "mustache addresses.json subgraph.template.yaml > subgraph.yaml",
     "codegen": "npm run prepare && graph codegen --output-dir src/types/",
     "setup": "npm run codegen && npm run create-local && npm run deploy-local",
     "create-local": "graph create graphprotocol/ens --node http://127.0.0.1:8020",
@@ -15,13 +15,13 @@
     "docker:deploy-local": "graph deploy graphprotocol/ens --debug --ipfs http://ens-app_ipfs_1:5001 --node http://ens-app_graph-node_1:8020/",
     "docker:remove-local": "graph remove graphprotocol/ens --node http://ens-app_graph-node_1:8020",
     "build": "graph build",
-    "deploy": "graph deploy impervious/forever-subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
+    "deploy": "graph deploy imperviousinc/forever-subgraph --ipfs https://api.thegraph.com/ipfs/ --node https://api.thegraph.com/deploy/",
     "watch-local": "graph deploy graphprotocol/ens --watch --debug --node http://127.0.0.1:8020/ --ipfs http://localhost:5001"
   },
   "devDependencies": {
     "@ensdomains/content-hash": "^2.5.3",
-    "@graphprotocol/graph-cli": "^0.17.1",
-    "@graphprotocol/graph-ts": "^0.17.0",
+    "@graphprotocol/graph-cli": "^0.23.2",
+    "@graphprotocol/graph-ts": "^0.25.0",
     "mustache": "^4.2.0"
   },
   "dependencies": {}

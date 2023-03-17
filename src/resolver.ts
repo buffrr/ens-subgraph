@@ -28,7 +28,7 @@ import {
   TextChanged,
 } from './types/schema'
 
-import { Bytes, BigInt, Address, EthereumEvent } from "@graphprotocol/graph-ts";
+import { Bytes, BigInt, Address, ethereum } from "@graphprotocol/graph-ts";
 
 import { log } from '@graphprotocol/graph-ts'
 
@@ -192,6 +192,7 @@ export function handleDnsRecordChanged(event: DNSRecordChangedEvent): void {
   resolver.save()
 }
 
+// @ts-ignore
 function encodeRRSetKey(name: Bytes, resource: i32) : Bytes {
   let type = Bytes.fromI32(resource)
   let newRRset = new Bytes(name.length + 4)
@@ -209,15 +210,17 @@ function encodeRRSetKey(name: Bytes, resource: i32) : Bytes {
   return newRRset
 }
 
+// Must always pass a Bytes of length > 4
 function decodeRRSetKey(key: Bytes) : RRSetKey {
-  let name = key.subarray(0, key.length - 4) as Bytes
-  let type = key.subarray(key.length - 4) as Bytes
+  let name = Bytes.fromUint8Array(key.subarray(0, key.length - 4))
+  let type = Bytes.fromUint8Array(key.subarray(key.length - 4))
 
   return {name: name, resource: type.toI32() }
 }
 
 class RRSetKey {
   name : Bytes
+  // @ts-ignore
   resource: i32
 }
 
@@ -266,7 +269,7 @@ function getOrCreateResolver(node: Bytes, address: Address): Resolver {
   return resolver as Resolver
 }
 
-function createEventID(event: EthereumEvent): string {
+function createEventID(event: ethereum.Event): string {
   return event.block.number.toString().concat('-').concat(event.logIndex.toString())
 }
 

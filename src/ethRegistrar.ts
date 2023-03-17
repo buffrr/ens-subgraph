@@ -18,7 +18,7 @@ import {
 
 import {
   NameRegistered as ControllerNameRegisteredEvent,
-} from './types/EthRegistrarController/EthRegistrarController'
+} from './types/ETHRegistrarController/ETHRegistrarController'
 
 // Import entity types generated from the GraphQL schema
 import { Account, Domain, Registration, NameRegistered, NameTransferred } from './types/schema'

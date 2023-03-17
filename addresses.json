@@ -1,0 +1,10 @@
+{
+  "network": "mainnet",
+  "startBlock": "12774296",
+  "addresses": {
+    "ens": "0x0001af047E9fb5dCD99E6823C900f3D8f5b2c5f4",
+    "registrar": "0x8436F16c090B0A6B2A7ae4CfCc82E007302a4b38",
+    "controller": "0x24bf911ebF9cc5Ce5d65041b9343D7c5F9565509",
+    "newController": "0x803a0d56A8CB4beD2073832e7425BaF15a4B6518"
+  }
+}

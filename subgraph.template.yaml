@@ -1,8 +1,8 @@
-specVersion: 0.0.3
+specVersion: 0.0.4
 description: >-
   A secure & decentralized way to address resources on and off the blockchain
   using simple, human-readable names. Access domains and transfer history.
-repository: 'https://github.com/impervious/forever-subgraph'
+repository: 'https://github.com/imperviousinc/forever-subgraph'
 schema:
   file: ./schema.graphql
 dataSources:
@@ -12,10 +12,10 @@ dataSources:
     source:
       startBlock: {{startBlock}}
       address: '{{addresses.ens}}'
-      abi: EnsRegistry
+      abi: ENSRegistry
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/ensRegistry.ts
       entities:
@@ -23,8 +23,8 @@ dataSources:
         - Account
         - Resolver
       abis:
-        - name: EnsRegistry
-          file: ../build/contracts/EnsRegistry.json
+        - name: ENSRegistry
+          file: ./abi/ENSRegistry.json
       eventHandlers:
         - event: 'Transfer(indexed bytes32,address)'
           handler: handleTransfer
@@ -34,6 +34,7 @@ dataSources:
           handler: handleNewResolver
         - event: 'NewTTL(indexed bytes32,uint64)'
           handler: handleNewTTL
+
   - kind: ethereum/contract
     name: Resolver
     network: {{network}}
@@ -42,7 +43,7 @@ dataSources:
       abi: Resolver
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/resolver.ts
       entities:
@@ -57,7 +58,7 @@ dataSources:
         - AuthorisationChanged
       abis:
         - name: Resolver
-          file: ../build/contracts/PublicResolver.json
+          file: ./abi/PublicResolver.json
       eventHandlers:
         - event: 'ABIChanged(indexed bytes32,indexed uint256)'
           handler: handleABIChanged
@@ -83,6 +84,7 @@ dataSources:
           handler: handleDnsRecordDeleted
         - event: 'DNSZoneCleared(indexed bytes32)'
           handler: handleDnsZoneCleared
+
   - kind: ethereum/contract
     name: BaseRegistrar
     network: {{network}}
@@ -92,7 +94,7 @@ dataSources:
       abi: BaseRegistrar
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/ethRegistrar.ts
       entities:
@@ -101,29 +103,51 @@ dataSources:
         - NameTransferred
       abis:
         - name: BaseRegistrar
-          file: ../build/contracts/BaseRegistrar.json
+          file: ./abi/BaseRegistrar.json
       eventHandlers:
         - event: 'NameRegistered(indexed uint256,indexed address)'
           handler: handleNameRegistered
         - event: 'Transfer(indexed address,indexed address,indexed uint256)'
           handler: handleNameTransferred
+
   - kind: ethereum/contract
-    name: EthRegistrarController
+    name: ETHRegistrarController
     network: {{network}}
     source:
       startBlock: {{startBlock}}
       address: '{{addresses.controller}}'
-      abi: EthRegistrarController
+      abi: ETHRegistrarController
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.5
       language: wasm/assemblyscript
       file: ./src/ethRegistrar.ts
       entities:
         - Registration
       abis:
-        - name: EthRegistrarController
-          file: ../build/contracts/EthRegistrarController.json
+        - name: ETHRegistrarController
+          file: ./abi/ETHRegistrarController.json
+      eventHandlers:
+        - event: 'NameRegistered(string,indexed bytes32,indexed address,uint256)'
+          handler: handleNameRegisteredByController
+
+  - kind: ethereum/contract
+    name: ForeverRegistrarController
+    network: {{network}}
+    source:
+      startBlock: {{startBlock}}
+      address: '{{addresses.newController}}'
+      abi: ForeverRegistrarController
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      file: ./src/ethRegistrar.ts
+      entities:
+        - Registration
+      abis:
+        - name: ForeverRegistrarController
+          file: ./abi/ForeverRegistrarController.json
       eventHandlers:
         - event: 'NameRegistered(string,indexed bytes32,indexed address,uint256)'
           handler: handleNameRegisteredByController
