@@ -55,23 +55,20 @@ function _handleNewOwner(event: NewOwnerEvent): void {
 
   if(domain.name == null) {
     // Get label and node names
-    let label = ens.nameByHash(event.params.label.toHexString())
-    if (label != null) {
-      domain.labelName = label
-    }
+    let label = '[' + event.params.label.toHexString().slice(2) + ']'
 
-    if(label == null) {
-      label = '[' + event.params.label.toHexString().slice(2) + ']'
-    }
     if(event.params.node.toHexString() == '0x0000000000000000000000000000000000000000000000000000000000000000') {
       domain.name = label
     } else {
-      let parent = Domain.load(event.params.node.toHexString())
-      domain.name = label + '.' + parent.name
+      let parent = Domain.load(event.params.node.toHexString())!
+      let name = parent.name
+      if (label && name) {
+        domain.name = label + '.' + name
+      }
     }
   }
 
-  domain.owner = account.id
+  domain.owner = event.params.owner.toHexString()
   domain.parent = event.params.node.toHexString()
   domain.labelhash = event.params.label
   domain.save()
@@ -80,8 +77,8 @@ function _handleNewOwner(event: NewOwnerEvent): void {
   domainEvent.blockNumber = event.block.number.toI32()
   domainEvent.transactionID = event.transaction.hash
   domainEvent.parentDomain = event.params.node.toHexString()
-  domainEvent.domain = domain.id
-  domainEvent.owner = account.id
+  domainEvent.domain = subnode
+  domainEvent.owner = event.params.owner.toHexString()
   domainEvent.save()
 }
 
@@ -93,7 +90,7 @@ export function handleTransfer(event: TransferEvent): void {
   account.save()
 
   // Update the domain owner
-  let domain = getDomain(node)
+  let domain = getDomain(node)!
   domain.owner = account.id
   domain.save()
 
@@ -110,7 +107,7 @@ export function handleNewResolver(event: NewResolverEvent): void {
   let id = event.params.resolver.toHexString().concat('-').concat(event.params.node.toHexString())
 
   let node = event.params.node.toHexString()
-  let domain = getDomain(node)
+  let domain = getDomain(node)!
   domain.resolver = id
 
   let resolver = Resolver.load(id)
@@ -136,7 +133,7 @@ export function handleNewResolver(event: NewResolverEvent): void {
 // Handler for NewTTL events
 export function handleNewTTL(event: NewTTLEvent): void {
   let node = event.params.node.toHexString()
-  let domain = getDomain(node)
+  let domain = getDomain(node)!
   domain.ttl = event.params.ttl
   domain.save()
 

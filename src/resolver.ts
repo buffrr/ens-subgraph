@@ -43,7 +43,7 @@ export function handleAddrChanged(event: AddrChangedEvent): void {
   resolver.save()
 
   let domain = Domain.load(event.params.node.toHexString())
-  if(domain.resolver == resolver.id) {
+  if(domain && domain.resolver == resolver.id) {
     domain.resolvedAddress = event.params.a.toHexString()
     domain.save()
   }
@@ -68,11 +68,13 @@ export function handleMulticoinAddrChanged(event: AddressChangedEvent): void {
   if(resolver.coinTypes == null) {
     resolver.coinTypes = [coinType];
     resolver.save();
-  } else if(!resolver.coinTypes.includes(coinType)) {
-    let coinTypes = resolver.coinTypes
-    coinTypes.push(coinType)
-    resolver.coinTypes = coinTypes
-    resolver.save()
+  } else {
+    let coinTypes = resolver.coinTypes!
+    if(!coinTypes.includes(coinType)){
+      coinTypes.push(coinType)
+      resolver.coinTypes = coinTypes
+      resolver.save()
+    }
   }
 
   let resolverEvent = new MulticoinAddrChanged(createEventID(event))
@@ -120,11 +122,13 @@ export function handleTextChanged(event: TextChangedEvent): void {
   if(resolver.texts == null) {
     resolver.texts = [key];
     resolver.save();
-  } else if(!resolver.texts.includes(key)) {
-    let texts = resolver.texts
-    texts.push(key)
-    resolver.texts = texts
-    resolver.save()
+  } else {
+    let texts = resolver.texts!
+    if (!texts.includes(key)) {
+      texts.push(key)
+      resolver.texts = texts
+      resolver.save()
+    }
   }
 
   let resolverEvent = new TextChanged(createEventID(event))
